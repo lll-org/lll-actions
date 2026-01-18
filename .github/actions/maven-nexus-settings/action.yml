@@ -26,7 +26,7 @@ runs:
         <settings>
           <mirrors>
             <mirror>
-              <id>${{ inputs.server_id }}-mirror</id>
+              <id>${{ inputs.server_id }}</id>
               <mirrorOf>${{ inputs.mirror_of }}</mirrorOf>
               <url>${{ inputs.nexus_mirror_url }}</url>
             </mirror>
