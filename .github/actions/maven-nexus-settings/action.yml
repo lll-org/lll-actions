@@ -1,0 +1,43 @@
+name: "Setup Maven settings for Nexus"
+description: "Generate ~/.m2/settings.xml with Nexus mirror + server credentials"
+inputs:
+  nexus_mirror_url:
+    description: "Nexus public/group repository URL for downloads"
+    required: true
+  server_id:
+    description: "Server id used in distributionManagement"
+    required: false
+    default: "nexus"
+  nexus_username:
+    required: true
+  nexus_password:
+    required: true
+  mirror_of:
+    required: false
+    default: "*"
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        set -e
+        mkdir -p ~/.m2
+        cat > ~/.m2/settings.xml << 'EOF'
+        <settings>
+          <mirrors>
+            <mirror>
+              <id>${{ inputs.server_id }}-mirror</id>
+              <mirrorOf>${{ inputs.mirror_of }}</mirrorOf>
+              <url>${{ inputs.nexus_mirror_url }}</url>
+            </mirror>
+          </mirrors>
+
+          <servers>
+            <server>
+              <id>${{ inputs.server_id }}</id>
+              <username>${{ inputs.nexus_username }}</username>
+              <password>${{ inputs.nexus_password }}</password>
+            </server>
+          </servers>
+        </settings>
+        EOF
